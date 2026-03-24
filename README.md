@@ -1,6 +1,6 @@
 # OmniLife360: A Benchmark for 3D Reconstruction from In-the-Wild 360° Captures
 
-> [**OmniLife360: A Benchmark for 3D Reconstruction from In-the-Wild 360° Captures**](https://arxiv.org/abs/2311.18561),            
+> **OmniLife360: A Benchmark for 3D Reconstruction from In-the-Wild 360° Captures**,            
 > Zonglin Zhao, Bowen Zhang, Yatai Li, Chao.Liang, Zhipeng Zhang  
 > **ECCV 2026**
 
