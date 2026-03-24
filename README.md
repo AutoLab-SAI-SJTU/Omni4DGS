@@ -96,7 +96,7 @@ after process you will get the result structure like this:
 ```
 among them you can delete match/ and reconstruction/
 
-#### Obtain 2D masks via [OmniSAM](https://github.com/Ding-Zhong/OmniSAM), follow the instruction in [run_omnisam_dynamic_batch.md](scripts\README_run_omnisam_dynamic_batch.md)
+#### Obtain 2D masks via [OmniSAM](https://github.com/Ding-Zhong/OmniSAM), follow the instruction in [run_omnisam_dynamic_batch.md](scripts/README_run_omnisam_dynamic_batch.md)
 
 the final structure should be:
 ```
