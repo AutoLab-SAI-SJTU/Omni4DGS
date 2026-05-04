@@ -406,7 +406,6 @@ def plot_camera_orientations(cam_list, xyz):
 
     ax.scatter(xyz[:,0],xyz[:,1],xyz[:,2],c='r',s=0.1)
     for cam in tqdm(cam_list):
-        # Ã·»° R ∫Õ T
         R = cam.R
         T = cam.T
 
