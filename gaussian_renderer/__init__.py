@@ -73,7 +73,7 @@ def render(viewpoint_camera: Camera, pc: GaussianModel, pipe, bg_color: torch.Te
     else:
         means3D = pc.get_xyz_SHM(viewpoint_camera.timestamp)
         marginal_t = pc.get_marginal_t(viewpoint_camera.timestamp)
-    #opacity = opacity * marginal_t 
+    opacity = opacity * marginal_t 
     
     if pipe.compute_cov3D_python:
         cov3D_precomp = pc.get_covariance(scaling_modifier)
