@@ -51,8 +51,8 @@ class GaussianModel:
         self._scaling = torch.empty(0)
         self._rotation = torch.empty(0)
         self._opacity = torch.empty(0)
-        self._t = torch.empty(0) # ¶ÔÓ¦ÂÛÎÄ¹«Ê½ÖÐµÄÊýÑ§·ûºÅtao
-        self._beta = torch.empty(0) # ¶ÔÓ¦ÂÛÎÄ¹«Ê½ÖÐµÄÊýÑ§·ûºÅbeta
+        self._t = torch.empty(0) 
+        self._beta = torch.empty(0) 
         self._velocity_radial = torch.empty(0)
         self._velocity_tangent = torch.empty(0)
         
@@ -145,26 +145,26 @@ class GaussianModel:
     def get_xyz_SHM(self, t):
         a = 1/self.T * np.pi * 2
         
-        # === ·½°¸1£º»ùÓÚÎ³¶ÈµÄ×ÔÊÊÓ¦È¨ÖØºÏ³É ===
-        # ¼ÆËã¸ßË¹µãÔÚÇò×ø±êÏµÏÂµÄÎ³¶È
-        # ¦È = atan2(y, sqrt(x^2 + z^2))  # Î³¶È½Ç
+        # === ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î³ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½Ó¦È¨ï¿½ØºÏ³ï¿½ ===
+        # ï¿½ï¿½ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Âµï¿½Î³ï¿½ï¿½
+        # ï¿½ï¿½ = atan2(y, sqrt(x^2 + z^2))  # Î³ï¿½È½ï¿½
         xyz_norm = torch.norm(self._xyz, dim=-1, keepdim=True).clamp(min=1e-8)
-        # ¹éÒ»»¯µÄ·½ÏòÏòÁ¿
+        # ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         xyz_dir = self._xyz / xyz_norm
-        # Î³¶ÈÈ¨ÖØ£º³àµÀ¸½½ü(¦È¡Ö0)ÇÐÏòÈ¨ÖØ¸ß£¬Á½¼«¸½½ü(¦È¡Ö¦Ð/2)¾¶ÏòÈ¨ÖØ¸ß
-        # cos(¦È) = y / |xyz| (¶ÔÓÚÇòÃæµã)
-        cos_theta = xyz_dir[:, 1:2].clamp(-1, 1)  # sin(latitude) Ïàµ±ÓÚ y ·½Ïò·ÖÁ¿
-        w_lat = torch.pow(torch.sqrt(1 - cos_theta.pow(2) + 1e-8), 1.5)  # Î³¶ÈÈ¨ÖØ
-        w_radial = 1 - w_lat  # ¾¶ÏòÈ¨ÖØ
+        # Î³ï¿½ï¿½È¨ï¿½Ø£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½È¡ï¿½0)ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ø¸ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½È¡Ö¦ï¿½/2)ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ø¸ï¿½
+        # cos(ï¿½ï¿½) = y / |xyz| (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        cos_theta = xyz_dir[:, 1:2].clamp(-1, 1)  # sin(latitude) ï¿½àµ±ï¿½ï¿½ y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        w_lat = torch.pow(torch.sqrt(1 - cos_theta.pow(2) + 1e-8), 1.5)  # Î³ï¿½ï¿½È¨ï¿½ï¿½
+        w_radial = 1 - w_lat  # ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½
         
-        # ¸ù¾ÝÈ¨ÖØºÏ³ÉÈ«¾°ËÙ¶È
+        # ï¿½ï¿½ï¿½ï¿½È¨ï¿½ØºÏ³ï¿½È«ï¿½ï¿½ï¿½Ù¶ï¿½
         v_pano = self._velocity_radial * w_radial + self._velocity_tangent * w_lat
         
         return self._xyz + v_pano * torch.sin((t-self._t)*a)/a
 
     @property
     def get_inst_velocity(self):
-        # === »ùÓÚÎ³¶ÈµÄ×ÔÊÊÓ¦È¨ÖØºÏ³É ===
+        # === ï¿½ï¿½ï¿½ï¿½Î³ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½Ó¦È¨ï¿½ØºÏ³ï¿½ ===
         xyz_norm = torch.norm(self._xyz, dim=-1, keepdim=True).clamp(min=1e-8)
         xyz_dir = self._xyz / xyz_norm
         cos_theta = xyz_dir[:, 1:2].clamp(-1, 1)
