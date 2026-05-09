@@ -145,26 +145,18 @@ class GaussianModel:
     def get_xyz_SHM(self, t):
         a = 1/self.T * np.pi * 2
         
-        # === ����1������γ�ȵ�����ӦȨ�غϳ� ===
-        # �����˹����������ϵ�µ�γ��
-        # �� = atan2(y, sqrt(x^2 + z^2))  # γ�Ƚ�
         xyz_norm = torch.norm(self._xyz, dim=-1, keepdim=True).clamp(min=1e-8)
-        # ��һ���ķ�������
         xyz_dir = self._xyz / xyz_norm
-        # γ��Ȩ�أ��������(�ȡ�0)����Ȩ�ظߣ���������(�ȡ֦�/2)����Ȩ�ظ�
-        # cos(��) = y / |xyz| (���������)
-        cos_theta = xyz_dir[:, 1:2].clamp(-1, 1)  # sin(latitude) �൱�� y �������
-        w_lat = torch.pow(torch.sqrt(1 - cos_theta.pow(2) + 1e-8), 1.5)  # γ��Ȩ��
-        w_radial = 1 - w_lat  # ����Ȩ��
+        cos_theta = xyz_dir[:, 1:2].clamp(-1, 1) 
+        w_lat = torch.pow(torch.sqrt(1 - cos_theta.pow(2) + 1e-8), 1.5)  
+        w_radial = 1 - w_lat  
         
-        # ����Ȩ�غϳ�ȫ���ٶ�
         v_pano = self._velocity_radial * w_radial + self._velocity_tangent * w_lat
         
         return self._xyz + v_pano * torch.sin((t-self._t)*a)/a
 
     @property
     def get_inst_velocity(self):
-        # === ����γ�ȵ�����ӦȨ�غϳ� ===
         xyz_norm = torch.norm(self._xyz, dim=-1, keepdim=True).clamp(min=1e-8)
         xyz_dir = self._xyz / xyz_norm
         cos_theta = xyz_dir[:, 1:2].clamp(-1, 1)
